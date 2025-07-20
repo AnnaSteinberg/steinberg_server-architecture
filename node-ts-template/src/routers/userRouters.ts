@@ -1,12 +1,13 @@
 import {IncomingMessage, ServerResponse} from "node:http";
 import {UserController} from "../controllers/UserController{.ts";
 import {PORT} from "../config/userServerConfig.ts";
+import {myLogger} from "../events/logger.ts";
 
 
 export const userRouters =
     async ( req:IncomingMessage, res:ServerResponse, controller:UserController ) => {
     const {url,method}= req;
-    const fURL = new URL(req.url!,`http://localhost:${PORT}`);
+    const fURL = new URL(url!,`http://localhost:${PORT}`);
 
     switch (fURL.pathname + method){
         case '/api/users' + 'POST':{
@@ -29,8 +30,15 @@ export const userRouters =
             await controller.getUserById(req,res);
             break;
         }
+        case '/api/logger' + 'GET':{
+            const allLogs = myLogger.getLogArray()
+            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.end(JSON.stringify(allLogs));
+            break;
+        }
+
         default:{
-            console.log(url! + method)
+            myLogger.log(fURL.pathname + method)
             res.writeHead(404, {'Content-Type': 'text/plain'});
             res.end("Page Not Found!");
         }

@@ -5,7 +5,6 @@ import {PORT} from "../config/userServerConfig.ts";
 export const getId = (req: IncomingMessage):number=> {
     // const {url} = req;
     const fURL = new URL(req.url!,`http://localhost:${PORT}`);
-    console.log(Number(fURL.searchParams.get("userId")))
     return Number(fURL.searchParams.get("userId"));
 
 }
