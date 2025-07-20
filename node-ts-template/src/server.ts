@@ -10,7 +10,11 @@ export const launchServer = ( )=> {
     const userController:UserController = new UserController(userService);
     createServer(async ( req, res ) => {
         await userRouters( req, res, userController );
+
+
     }).listen(PORT, ()=>{
         console.log( `Server started on port http://localhost:${PORT}` );
     })
+
 }
+

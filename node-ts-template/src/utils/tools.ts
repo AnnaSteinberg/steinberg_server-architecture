@@ -1,8 +1,17 @@
 import {IncomingMessage} from "node:http";
+import {User} from "../model/userTypes.ts";
+import {PORT} from "../config/userServerConfig.ts";
 
-export const sayHi = (name:string):void => {
-    console.log(`Hello ${name}`)
+export const getId = (req: IncomingMessage):number=> {
+    // const {url} = req;
+    const fURL = new URL(req.url!,`http://localhost:${PORT}`);
+    console.log(Number(fURL.searchParams.get("userId")))
+    return Number(fURL.searchParams.get("userId"));
+
 }
+
+
+
 export async  function parseBody(req: InstanceType<typeof IncomingMessage>) {
     return new Promise((resolve, reject) => {
         let body = "";
@@ -18,3 +27,7 @@ export async  function parseBody(req: InstanceType<typeof IncomingMessage>) {
         })
     })
 }
+
+
+export const findIndex = (users:User[],userId:number):number =>
+    users.findIndex(elem => elem.id === userId)
